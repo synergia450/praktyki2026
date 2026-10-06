@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="pl" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyTrack — ZSE Gdańsk Academic Hub</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Theme CSS Variables: GitHub Dark & Marble Light */
+    :root {
+      /* Marble Light Theme */
+      --bg-canvas: #f6f8fa;
+      --bg-surface: #ffffff;
+      --bg-subtle: #eff2f5;
+      --bg-hover: #eaeef2;
+      --border-default: #d0d7de;
+      --border-muted: #e1e4e8;
+      --text-primary: #1f2328;
+      --text-secondary: #57606a;
+      --text-muted: #8c959f;
+      --accent-green: #1a7f37;
+      --accent-green-bg: #dafbe1;
+      --accent-green-border: #4ac26b;
+      --accent-blue: #0969da;
+      --accent-blue-bg: #ddf4ff;
+      --accent-purple: #8250df;
+      --accent-amber: #9a6700;
+      --accent-amber-bg: #fff8c5;
+      --accent-red: #cf222e;
+      --accent-red-bg: #ffebe9;
+      --card-shadow: 0 1px 3px rgba(31, 35, 40, 0.04), 0 1px 0 rgba(31, 35, 40, 0.04);
+      --code-bg: #f6f8fa;
+    }
+
+    html.dark {
+      /* GitHub Dark Theme */
+      --bg-canvas: #0d1117;
+      --bg-surface: #161b22;
+      --bg-subtle: #21262d;
+      --bg-hover: #30363d;
+      --border-default: #30363d;
+      --border-muted: #21262d;
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --text-muted: #6e7681;
+      --accent-green: #238636;
+      --accent-green-bg: rgba(35, 134, 54, 0.15);
+      --accent-green-border: rgba(46, 160, 67, 0.4);
+      --accent-blue: #58a6ff;
+      --accent-blue-bg: rgba(56, 139, 253, 0.15);
+      --accent-purple: #bc8cff;
+      --accent-amber: #d29922;
+      --accent-amber-bg: rgba(210, 153, 34, 0.15);
+      --accent-red: #f85149;
+      --accent-red-bg: rgba(248, 81, 73, 0.15);
+      --card-shadow: none;
+      --code-bg: #0d1117;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-primary);
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    /* Minimalist Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-canvas);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-default);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    .github-border {
+      border: 1px solid var(--border-default);
+    }
+    .github-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      box-shadow: var(--card-shadow);
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-[#238636] selection:text-white">
+
+  <!-- Toast Notifications Root -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Global Header Bar -->
+  <header class="h-14 border-b border-[var(--border-default)] bg-[var(--bg-surface)] sticky top-0 z-40 px-4 sm:px-6 flex items-center justify-between transition-colors">
+    <!-- Brand / Title -->
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-default)] flex items-center justify-center text-[var(--text-primary)] font-mono text-sm font-bold">
+          <i data-lucide="terminal" class="w-4 h-4"></i>
+        </div>
+        <span class="font-bold text-sm tracking-tight text-[var(--text-primary)] font-mono">
+          StudyTrack<span class="text-[var(--text-muted)] font-normal">.zse</span>
+        </span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-2 pl-3 border-l border-[var(--border-default)] text-xs text-[var(--text-secondary)]">
+        <span class="font-medium text-[var(--text-primary)]">ZSE Gdańsk</span>
+        <span class="text-[var(--text-muted)]">•</span>
+        <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-[var(--bg-subtle)] border border-[var(--border-default)]">4P · Technik Programista</span>
+      </div>
+    </div>
+
+    <!-- Center: Pomodoro & Vulcan Feed Status -->
+    <div class="flex items-center gap-3">
+      <!-- Minimalist Focus Timer -->
+      <div class="flex items-center gap-2 bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded-md px-2.5 py-1 text-xs">
+        <span class="text-[var(--text-muted)] font-mono font-medium hidden sm:inline">FOCUS:</span>
+        <span id="pomo-display" class="font-mono font-semibold text-[var(--text-primary)] tracking-wider">25:00</span>
+        <div class="flex items-center gap-1 border-l border-[var(--border-default)] pl-1.5 ml-1">
+          <button id="pomo-toggle" onclick="togglePomodoro()" class="p-0.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition" title="Start/Pause">
+            <i data-lucide="play" class="w-3.5 h-3.5" id="pomo-icon"></i>
+          </button>
+          <button onclick="resetPomodoro()" class="p-0.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition" title="Reset">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Vulcan Sync Button -->
+      <button onclick="simulateVulcanSync()" class="hidden lg:flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[var(--border-default)] px-2.5 py-1 rounded-md transition">
+        <span class="w-2 h-2 rounded-full bg-[#2ea043] inline-block" id="sync-pulse"></span>
+        <span id="sync-label">Vulcan API: Połączono</span>
+        <i data-lucide="refresh-cw" class="w-3 h-3 text-[var(--text-muted)] ml-0.5" id="sync-spin"></i>
+      </button>
+    </div>
+
+    <!-- Right: Theme Switcher & User Profile -->
+    <div class="flex items-center gap-2.5">
+      <!-- Theme Switcher Button -->
+      <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition" title="Przełącz motyw (GitHub Dark / Marble Light)">
+        <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+        <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+      </button>
+
+      <!-- Key Modal Button -->
+      <button onclick="openApiKeyModal()" class="p-1.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition" title="Klucz Gemini API">
+        <i data-lucide="key" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Student Badge -->
+      <div class="flex items-center gap-2 pl-2 border-l border-[var(--border-default)]">
+        <div class="w-7 h-7 rounded-full bg-[var(--bg-subtle)] border border-[var(--border-default)] flex items-center justify-center font-mono text-xs font-semibold text-[var(--text-primary)]">
+          JK
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Navigation Bar (GitHub Subnav style) -->
+  <div class="border-b border-[var(--border-default)] bg-[var(--bg-surface)] px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex items-center gap-1 overflow-x-auto text-xs font-medium py-1.5">
+      <button onclick="switchTab('dashboard')" data-tab="dashboard" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[var(--border-default)] transition">
+        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5"></i>
+        <span>Pulpit</span>
+      </button>
+      <button onclick="switchTab('exams')" data-tab="exams" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition">
+        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+        <span>Sprawdziany & ZSE</span>
+        <span class="font-mono text-[10px] px-1 rounded bg-[var(--bg-subtle)] text-[var(--text-muted)] border border-[var(--border-default)]">4</span>
+      </button>
+      <button onclick="switchTab('tasks')" data-tab="tasks" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition">
+        <i data-lucide="check-square" class="w-3.5 h-3.5"></i>
+        <span>Zadania & Projekty</span>
+      </button>
+      <button onclick="switchTab('notes')" data-tab="notes" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition">
+        <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+        <span>Notatki & Kod</span>
+      </button>
+      <button onclick="switchTab('mentor')" data-tab="mentor" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition">
+        <i data-lucide="bot" class="w-3.5 h-3.5 text-[#8250df]"></i>
+        <span>AI Korepetytor</span>
+      </button>
+      <button onclick="switchTab('grades')" data-tab="grades" class="tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition">
+        <i data-lucide="award" class="w-3.5 h-3.5"></i>
+        <span>Dziennik & Oceny</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main View Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- ================= 1. TAB: DASHBOARD ================= -->
+    <section id="tab-dashboard" class="tab-view space-y-6">
+      
+      <!-- Top Row: Metrics Overview Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Metric 1: Średnia -->
+        <div class="github-card p-4">
+          <div class="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1">
+            <span>Średnia semestralna</span>
+            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-[#2ea043]"></i>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold font-mono text-[var(--text-primary)]">4.82</span>
+            <span class="text-xs font-mono text-[#2ea043]">↑ +0.12</span>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)] mt-1">Stan na: 05.10.2026</p>
+        </div>
+
+        <!-- Metric 2: Frekwencja -->
+        <div class="github-card p-4">
+          <div class="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1">
+            <span>Frekwencja ZSE</span>
+            <i data-lucide="check" class="w-3.5 h-3.5 text-[#58a6ff]"></i>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold font-mono text-[var(--text-primary)]">94.8%</span>
+            <span class="text-xs text-[var(--text-muted)] font-mono">min. 50%</span>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)] mt-1">Brak nieusprawiedliwionych</p>
+        </div>
+
+        <!-- Metric 3: Egzamin INF.03 -->
+        <div class="github-card p-4">
+          <div class="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1">
+            <span>Egzamin INF.03 / INF.04</span>
+            <i data-lucide="award" class="w-3.5 h-3.5 text-[#8250df]"></i>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold font-mono text-[var(--text-primary)]">88%</span>
+            <span class="text-xs text-[var(--text-muted)] font-mono">gotowość</span>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)] mt-1">Test praktyczny za 10 dni</p>
+        </div>
+
+        <!-- Metric 4: Sprawdziany w tym tygodniu -->
+        <div class="github-card p-4">
+          <div class="flex items-center justify-between text-xs text-[var(--text-secondary)] mb-1">
+            <span>Sprawdziany & Kartkówki</span>
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 text-[#d29922]"></i>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold font-mono text-[var(--text-primary)]">3</span>
+            <span class="text-xs text-[var(--text-muted)]">najbliższe 7 dni</span>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)] mt-1">Najbliższy: Matematyka (jutro)</p>
+        </div>
+      </div>
+
+      <!-- GitHub-Style Study & Attendance Activity Heatmap -->
+      <div class="github-card p-4 sm:p-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-[var(--border-default)]">
+          <div>
+            <h3 class="text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-2">
+              <i data-lucide="grid" class="w-3.5 h-3.5 text-[var(--text-secondary)]"></i>
+              Aktywność Nauki & Frekwencja (Ostatnie 35 Dni)
+            </h3>
+            <p class="text-[11px] text-[var(--text-secondary)] mt-0.5">Godziny nauki własnej, wykonane laboratoria i obecność na zajęciach w ZSE Gdańsk</p>
+          </div>
+          <div class="flex items-center gap-1.5 text-[11px] text-[var(--text-muted)]">
+            <span>Mniej</span>
+            <span class="w-2.5 h-2.5 rounded-sm bg-[var(--bg-subtle)] border border-[var(--border-default)]"></span>
+            <span class="w-2.5 h-2.5 rounded-sm bg-[#0e4429] dark:bg-[#0e4429] bg-opacity-40"></span>
+            <span class="w-2.5 h-2.5 rounded-sm bg-[#006d32] dark:bg-[#006d32]"></span>
+            <span class="w-2.5 h-2.5 rounded-sm bg-[#26a641] dark:bg-[#26a641]"></span>
+            <span class="w-2.5 h-2.5 rounded-sm bg-[#39d353] dark:bg-[#39d353]"></span>
+            <span>Więcej</span>
+          </div>
+        </div>
+
+        <!-- Heatmap Grid Container -->
+        <div class="overflow-x-auto pb-1">
+          <div class="inline-grid grid-rows-7 grid-flow-col gap-1.5 text-[10px]" id="activity-heatmap">
+            <!-- Populated dynamically with 35 days -->
+          </div>
+        </div>
+        <div id="heatmap-tooltip" class="text-xs text-[var(--text-secondary)] mt-2 font-mono h-4">
+          Wskaż pole, aby wyświetlić szczegóły sesji.
+        </div>
+      </div>
+
+      <!-- Minimalist Progress Bars (Replaces neon rings with engineering metrics) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="github-card p-4 space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="font-medium text-[var(--text-primary)]">Tygodniowy cel nauki</span>
+            <span class="font-mono text-[var(--text-secondary)]">18.5h / 24h</span>
+          </div>
+          <div class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] h-2 rounded-sm overflow-hidden">
+            <div class="bg-[#2ea043] h-full" style="width: 77%"></div>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)]">Zrealizowano 77% planu tygodniowego</p>
+        </div>
+
+        <div class="github-card p-4 space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="font-medium text-[var(--text-primary)]">Zaliczone laboratoria (Semestr)</span>
+            <span class="font-mono text-[var(--text-secondary)]">29 / 33 oddanych</span>
+          </div>
+          <div class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] h-2 rounded-sm overflow-hidden">
+            <div class="bg-[#58a6ff] h-full" style="width: 88%"></div>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)]">Pozostały 4 projekty końcowe</p>
+        </div>
+
+        <div class="github-card p-4 space-y-2">
+          <div class="flex justify-between text-xs">
+            <span class="font-medium text-[var(--text-primary)]">Przedmioty zawodowe (Frekwencja)</span>
+            <span class="font-mono text-[var(--text-secondary)]">96.2%</span>
+          </div>
+          <div class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] h-2 rounded-sm overflow-hidden">
+            <div class="bg-[#8250df] h-full" style="width: 96%"></div>
+          </div>
+          <p class="text-[11px] text-[var(--text-muted)]">Pracownie C++, SQL, Systemy Linux</p>
+        </div>
+      </div>
+
+      <!-- Two Columns: Upcoming Exams Feed & Today's Pending Tasks -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Left Column: Quick Vulcan Exams Feed -->
+        <div class="github-card p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-[var(--border-default)] mb-3">
+              <div class="flex items-center gap-2">
+                <i data-lucide="calendar-days" class="w-4 h-4 text-[#d29922]"></i>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-[var(--text-primary)]">Najbliższe Sprawdziany (ZSE)</h3>
+              </div>
+              <button onclick="switchTab('exams')" class="text-xs text-[#0969da] dark:text-[#58a6ff] hover:underline flex items-center gap-1 font-medium">
+                Pokaż wszystkie <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </button>
+            </div>
+
+            <div class="space-y-2.5" id="dashboard-exam-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="pt-3 mt-4 border-t border-[var(--border-default)] flex items-center justify-between text-[11px] text-[var(--text-muted)]">
+            <span class="font-mono">zse.edu.gdansk.pl/dziennik</span>
+            <span>Klasa 4P · Profil Technik Programista</span>
+          </div>
+        </div>
+
+        <!-- Right Column: Priority Tasks Checklist -->
+        <div class="github-card p-4 sm:p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b border-[var(--border-default)] mb-3">
+              <div class="flex items-center gap-2">
+                <i data-lucide="check-circle-2" class="w-4 h-4 text-[#2ea043]"></i>
+                <h3 class="text-xs font-semibold uppercase tracking-wider text-[var(--text-primary)]">Priorytety do zrobienia</h3>
+              </div>
+              <button onclick="switchTab('tasks')" class="text-xs text-[#0969da] dark:text-[#58a6ff] hover:underline flex items-center gap-1 font-medium">
+                Zarządzaj zadaniami <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </button>
+            </div>
+
+            <div class="space-y-2" id="dashboard-task-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Quick Add Input -->
+          <form onsubmit="handleQuickTaskAdd(event)" class="pt-3 mt-4 border-t border-[var(--border-default)] flex gap-2">
+            <input type="text" id="dashboard-quick-task" placeholder="Szybkie zadanie (np. Oddać sprawozdanie C++)..." class="flex-1 text-xs bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-2.5 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#58a6ff]">
+            <button type="submit" class="text-xs font-medium px-3 py-1.5 rounded bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] text-[var(--text-primary)] transition">
+              Dodaj
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= 2. TAB: SPRAWDZIANY & ZSE ================= -->
+    <section id="tab-exams" class="tab-view hidden space-y-6">
+      
+      <!-- Banner / ZSE Vulcan Feed Bar -->
+      <div class="github-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex items-start sm:items-center gap-3">
+          <div class="w-10 h-10 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] flex items-center justify-center font-mono text-sm font-bold text-[var(--text-primary)]">
+            ZSE
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-sm font-bold text-[var(--text-primary)]">Zespół Szkół Energetycznych w Gdańsku</h2>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded border border-[#2ea043]/30 bg-[#238636]/10 text-[#2ea043]">Dziennik VULCAN</span>
+            </div>
+            <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+              Reja 25, 80-870 Gdańsk • Oficjalny terminarz sprawdzianów i kartkówek dla roku szkolnego 2026/2027
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="simulateVulcanSync()" class="text-xs font-medium px-3 py-1.5 rounded bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] text-[var(--text-primary)] flex items-center gap-1.5 transition">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            Wymuś synchronizację
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search -->
+      <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-1.5 bg-[var(--bg-surface)] p-1 border border-[var(--border-default)] rounded-md">
+          <button onclick="filterExams('all')" class="exam-filter-btn px-2.5 py-1 rounded text-[var(--text-primary)] bg-[var(--bg-subtle)] font-medium">Wszystkie</button>
+          <button onclick="filterExams('Sprawdzian')" class="exam-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Sprawdziany</button>
+          <button onclick="filterExams('Kartkówka')" class="exam-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Kartkówki</button>
+          <button onclick="filterExams('Egzamin')" class="exam-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Egzaminy INF</button>
+        </div>
+
+        <span class="text-xs text-[var(--text-muted)] font-mono" id="exam-count-label">Pokazano 4 wpisy</span>
+      </div>
+
+      <!-- Exams Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="exams-container">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ================= 3. TAB: ZADANIA & PROJEKTY ================= -->
+    <section id="tab-tasks" class="tab-view hidden space-y-6">
+      
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm font-bold text-[var(--text-primary)]">Zadania, Projekty & Sprawozdania</h2>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">Zarządzaj terminami oddania laboratoriów i prac domowych</p>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1 bg-[var(--bg-surface)] p-1 border border-[var(--border-default)] rounded-md text-xs">
+            <button onclick="filterTasks('all')" class="task-filter-btn px-2.5 py-1 rounded text-[var(--text-primary)] bg-[var(--bg-subtle)] font-medium">Wszystkie</button>
+            <button onclick="filterTasks('pending')" class="task-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Do zrobienia</button>
+            <button onclick="filterTasks('completed')" class="task-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium">Ukończone</button>
+          </div>
+
+          <button onclick="openAddTaskModal()" class="text-xs font-semibold px-3 py-1.5 rounded bg-[#238636] hover:bg-[#2ea043] text-white flex items-center gap-1.5 transition">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            Nowe zadanie
+          </button>
+        </div>
+      </div>
+
+      <!-- Task List Container -->
+      <div class="github-card divide-y divide-[var(--border-default)]" id="tasks-full-list">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- ================= 4. TAB: NOTATKI & KOD ================= -->
+    <section id="tab-notes" class="tab-view hidden space-y-6">
+      
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-bold text-[var(--text-primary)]">Notatki z Wykładów & Code Scratchpad</h2>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">Ściągi ze składni, pytania egzaminacyjne INF.03 oraz kody źródłowe</p>
+        </div>
+        <button onclick="createNewNote()" class="text-xs font-medium px-3 py-1.5 rounded bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] text-[var(--text-primary)] flex items-center gap-1.5 transition">
+          <i data-lucide="file-plus" class="w-3.5 h-3.5"></i>
+          Nowa notatka
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[620px]">
+        <!-- Notes Sidebar -->
+        <div class="github-card p-2 overflow-y-auto space-y-1" id="notes-sidebar">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Note / Code Editor Pane -->
+        <div class="lg:col-span-2 github-card p-4 flex flex-col justify-between">
+          <div class="space-y-3 flex-1 flex flex-col">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--border-default)] pb-2.5">
+              <input type="text" id="note-editor-title" class="bg-transparent text-sm font-bold text-[var(--text-primary)] focus:outline-none flex-1 font-mono" value="SQL: Podstawowe JOINy & 3NF">
+              <div class="flex items-center gap-2 text-xs">
+                <span id="note-editor-tag" class="px-2 py-0.5 rounded text-[11px] font-mono bg-[var(--bg-subtle)] border border-[var(--border-default)] text-[var(--text-secondary)]">Bazy Danych</span>
+                <button onclick="sendActiveNoteToAI()" class="text-xs font-medium px-2.5 py-1 rounded bg-[#8250df]/15 hover:bg-[#8250df]/25 text-[#8250df] border border-[#8250df]/30 flex items-center gap-1 transition">
+                  <i data-lucide="sparkles" class="w-3 h-3"></i>
+                  Wyjaśnij z AI
+                </button>
+              </div>
+            </div>
+
+            <!-- Monospace Code Area -->
+            <textarea id="note-editor-content" spellcheck="false" class="flex-1 w-full bg-[var(--code-bg)] border border-[var(--border-default)] rounded-md p-3 text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[#58a6ff] resize-none leading-relaxed" placeholder="Wpisz notatkę lub kod źródłowy..."></textarea>
+          </div>
+
+          <div class="pt-3 border-t border-[var(--border-default)] flex items-center justify-between text-xs text-[var(--text-secondary)]">
+            <span class="font-mono text-[11px]">Format: UTF-8 • Monospace • Auto-save gotowy</span>
+            <div class="flex gap-2">
+              <button onclick="copyCurrentNoteCode()" class="px-3 py-1 rounded bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] text-[var(--text-primary)] transition">
+                Kopiuj kod
+              </button>
+              <button onclick="saveCurrentNote()" class="px-3 py-1 rounded bg-[#238636] hover:bg-[#2ea043] text-white font-medium transition">
+                Zapisz
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 5. TAB: AI KOREPETYTOR ================= -->
+    <section id="tab-mentor" class="tab-view hidden space-y-4 max-w-4xl mx-auto h-[calc(100vh-12rem)] flex flex-col">
+      
+      <!-- Mentor Header -->
+      <div class="github-card p-3 sm:p-4 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-md bg-[var(--bg-subtle)] border border-[var(--border-default)] flex items-center justify-center text-[#8250df]">
+            <i data-lucide="bot" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-xs font-bold text-[var(--text-primary)]">ZSE Study Mentor</h2>
+              <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[var(--bg-subtle)] border border-[var(--border-default)] text-[var(--text-muted)]">Gemini 3 Flash</span>
+            </div>
+            <p class="text-[11px] text-[var(--text-secondary)]">Pomoc z C++, SQL, JS, rachunkiem prawdopodobieństwa i kwalifikacją INF.03</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="clearChatHistory()" class="text-xs text-[var(--text-secondary)] hover:text-[#cf222e] p-1.5 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] transition" title="Wyczyść historię">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 flex-shrink-0 text-xs">
+        <span class="text-[11px] text-[var(--text-muted)] flex-shrink-0">Szybkie pytania:</span>
+        <button onclick="sendQuickPrompt('Wytłumacz wskaźniki i referencje w C++ na czytelnych przykładach z pamięcią RAM')" class="flex-shrink-0 bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-default)] px-2.5 py-1 rounded text-[11px] font-mono transition">
+          C++: Wskaźniki
+        </button>
+        <button onclick="sendQuickPrompt('Wyjaśnij normalizację relacyjnych baz danych: 1NF, 2NF oraz 3NF pod kątem sprawdzianu')" class="flex-shrink-0 bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-default)] px-2.5 py-1 rounded text-[11px] font-mono transition">
+          SQL: 3NF & JOIN
+        </button>
+        <button onclick="sendQuickPrompt('Przeprowadź symulację 3 pytań praktycznych na egzamin INF.03 z JavaScript (DOM i zdarzenia)')" class="flex-shrink-0 bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-default)] px-2.5 py-1 rounded text-[11px] font-mono transition">
+          INF.03: Pytania testowe
+        </button>
+        <button onclick="sendQuickPrompt('Stwórz 3-dniowy zwięzły plan nauki na kartkówkę z kombinatoryki i prawdopodobieństwa')" class="flex-shrink-0 bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-default)] px-2.5 py-1 rounded text-[11px] font-mono transition">
+          Matematyka: Plan powtórki
+        </button>
+      </div>
+
+      <!-- Messages Thread (GitHub Issue Style) -->
+      <div id="mentor-chat-thread" class="flex-1 overflow-y-auto github-card p-4 space-y-4">
+        <!-- Initial Bot Message -->
+        <div class="flex gap-3">
+          <div class="w-7 h-7 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] flex items-center justify-center text-xs font-mono font-bold text-[#8250df] flex-shrink-0">
+            AI
+          </div>
+          <div class="flex-1 border border-[var(--border-default)] bg-[var(--bg-subtle)] rounded-md p-3 text-xs leading-relaxed text-[var(--text-primary)]">
+            <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b border-[var(--border-default)] text-[11px] text-[var(--text-secondary)] font-mono">
+              <span class="font-bold text-[var(--text-primary)]">ZSE Study Mentor</span>
+              <span>online</span>
+            </div>
+            <p>Cześć Jan! Jestem gotowy pomóc Ci w nauce do zbliżających się sprawdzianów w ZSE Gdańsk (C++, Bazy Danych SQL, Egzamin INF.03 lub Matematyka). Zadaj pytanie, wklej kod do analizy lub wybierz gotowy prompt powyżej.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input Form -->
+      <form onsubmit="handleSendChatMessage(event)" class="flex gap-2 flex-shrink-0">
+        <input type="text" id="mentor-input" placeholder="Zadaj pytanie korepetytorowi (np. Jak działają szablony klas w C++?)..." class="flex-1 text-xs bg-[var(--bg-surface)] border border-[var(--border-default)] rounded-md px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#58a6ff]">
+        <button type="submit" id="mentor-send-btn" class="text-xs font-semibold px-4 py-2 rounded-md bg-[#238636] hover:bg-[#2ea043] text-white flex items-center gap-1.5 transition disabled:opacity-50">
+          <span>Wyślij</span>
+          <i data-lucide="send" class="w-3.5 h-3.5"></i>
+        </button>
+      </form>
+    </section>
+
+    <!-- ================= 6. TAB: DZIENNIK & OCENY ================= -->
+    <section id="tab-grades" class="tab-view hidden space-y-6">
+      
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-sm font-bold text-[var(--text-primary)]">Dziennik Ocen & Zestawienie Przedmiotów</h2>
+          <p class="text-xs text-[var(--text-secondary)] mt-0.5">Dane zsynchronizowane z e-dziennikiem ZSE Vulcan</p>
+        </div>
+        <div class="text-right">
+          <span class="text-xs text-[var(--text-muted)]">Przewidywana średnia roczna:</span>
+          <span class="font-mono font-bold text-sm text-[#2ea043] ml-1">4.82</span>
+        </div>
+      </div>
+
+      <!-- Subject Summary Table -->
+      <div class="github-card overflow-hidden">
+        <div class="px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-subtle)] text-xs font-semibold text-[var(--text-primary)]">
+          Oceny semestralne i frekwencja według przedmiotów
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[var(--bg-subtle)] text-[var(--text-secondary)] font-mono text-[11px] border-b border-[var(--border-default)]">
+              <tr>
+                <th class="py-2.5 px-4">Przedmiot</th>
+                <th class="py-2.5 px-4">Nauczyciel</th>
+                <th class="py-2.5 px-4 text-center">Średnia</th>
+                <th class="py-2.5 px-4 text-center">Laboratoria</th>
+                <th class="py-2.5 px-4 text-center">Frekwencja</th>
+                <th class="py-2.5 px-4 text-right">Przewidywana</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border-default)] text-[var(--text-primary)] font-mono" id="grades-summary-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recent Grades Ledger -->
+      <div class="github-card overflow-hidden">
+        <div class="px-4 py-3 border-b border-[var(--border-default)] bg-[var(--bg-subtle)] text-xs font-semibold text-[var(--text-primary)]">
+          Ostatnie wpisy w dzienniku Vulcan
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[var(--bg-subtle)] text-[var(--text-secondary)] font-mono text-[11px] border-b border-[var(--border-default)]">
+              <tr>
+                <th class="py-2.5 px-4">Przedmiot</th>
+                <th class="py-2.5 px-4">Kategoria</th>
+                <th class="py-2.5 px-4 text-center">Waga</th>
+                <th class="py-2.5 px-4 text-center">Ocena</th>
+                <th class="py-2.5 px-4">Data</th>
+                <th class="py-2.5 px-4">Nauczyciel</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--border-default)] text-[var(--text-primary)]" id="recent-grades-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal: Add New Task -->
+  <div id="modal-task" class="fixed inset-0 z-50 bg-black/60 hidden flex items-center justify-center p-4">
+    <div class="github-card w-full max-w-md p-5 space-y-4 bg-[var(--bg-surface)]">
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border-default)]">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)]">Nowe zadanie</h3>
+        <button onclick="closeAddTaskModal()" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleCreateTask(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-[var(--text-secondary)] mb-1">Tytuł zadania</label>
+          <input type="text" id="task-modal-title" required placeholder="np. Sprawozdanie z laboratorium MySQL" class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-3 py-1.5 text-[var(--text-primary)] focus:outline-none focus:border-[#58a6ff]">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[var(--text-secondary)] mb-1">Przedmiot</label>
+            <select id="task-modal-subject" class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-2.5 py-1.5 text-[var(--text-primary)] focus:outline-none">
+              <option value="Programowanie C++">Programowanie C++</option>
+              <option value="Bazy Danych">Bazy Danych</option>
+              <option value="Aplikacje Webowe">Aplikacje Webowe</option>
+              <option value="Matematyka">Matematyka</option>
+              <option value="Język Angielski">Język Angielski</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[var(--text-secondary)] mb-1">Priorytet</label>
+            <select id="task-modal-priority" class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-2.5 py-1.5 text-[var(--text-primary)] focus:outline-none">
+              <option value="Wysoki">Wysoki</option>
+              <option value="Średni" selected>Średni</option>
+              <option value="Niski">Niski</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-[var(--text-secondary)] mb-1">Termin oddania</label>
+          <input type="date" id="task-modal-date" required class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-2.5 py-1.5 text-[var(--text-primary)] focus:outline-none">
+        </div>
+        <div class="pt-2 flex justify-end gap-2 border-t border-[var(--border-default)]">
+          <button type="button" onclick="closeAddTaskModal()" class="px-3 py-1.5 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Anuluj</button>
+          <button type="submit" class="px-3 py-1.5 rounded bg-[#238636] hover:bg-[#2ea043] text-white font-medium">Dodaj zadanie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: API Key Setup -->
+  <div id="modal-api-key" class="fixed inset-0 z-50 bg-black/60 hidden flex items-center justify-center p-4">
+    <div class="github-card w-full max-w-md p-5 space-y-4 bg-[var(--bg-surface)]">
+      <div class="flex items-center justify-between pb-2 border-b border-[var(--border-default)]">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
+          <i data-lucide="key" class="w-4 h-4 text-[#d29922]"></i>
+          Konfiguracja Gemini API Key
+        </h3>
+        <button onclick="closeApiKeyModal()" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)]">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-[var(--text-secondary)] leading-relaxed">
+        Domyślnie aplikacja działa w trybie zintegrowanym. Jeśli posiadasz własny klucz z Google AI Studio, możesz go tutaj zapisać. Klucz jest przechowywany w pamięci Twojej przeglądarki (localStorage).
+      </p>
+
+      <div>
+        <input type="password" id="api-key-input" placeholder="Wklej klucz AIzaSy..." class="w-full text-xs font-mono bg-[var(--bg-subtle)] border border-[var(--border-default)] rounded px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[#58a6ff]">
+      </div>
+
+      <div class="pt-2 flex justify-end gap-2 border-t border-[var(--border-default)]">
+        <button onclick="closeApiKeyModal()" class="px-3 py-1.5 rounded text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]">Zamknij</button>
+        <button onclick="saveApiKey()" class="px-3 py-1.5 rounded text-xs bg-[#238636] hover:bg-[#2ea043] text-white font-medium">Zapisz klucz</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Application Core State */
+    const state = {
+      theme: localStorage.getItem('studytrack_theme') || 'dark',
+      activeTab: 'dashboard',
+      apiKey: localStorage.getItem('studytrack_gemini_key') || '',
+      
+      // Pomodoro Timer
+      pomo: {
+        secondsLeft: 25 * 60,
+        isRunning: false,
+        timer: null
+      },
+
+      // Vulcan ZSE Exams Feed
+      exams: [
+        {
+          id: 1,
+          subject: 'Programowanie C++',
+          type: 'Sprawdzian',
+          date: '07.10.2026 (Środa, 08:00)',
+          room: 'Sala 204 (Pracownia C++)',
+          topic: 'Wskaźniki, referencje, dynamiczna alokacja pamięci (new/delete), szablony i biblioteka STL (std::vector, std::map)',
+          teacher: 'mgr inż. T. Kowalczyk',
+          weight: 3,
+          readiness: 75
+        },
+        {
+          id: 2,
+          subject: 'Bazy Danych',
+          type: 'Sprawdzian',
+          date: '10.10.2026 (Sobota / Zjazd, 10:45)',
+          room: 'Sala 112 (Bazy SQL)',
+          topic: 'Projektowanie relacyjnych baz danych, 1NF, 2NF, 3NF, klucze obce oraz złożone zapytania SELECT JOIN',
+          teacher: 'dr A. Wiśniewski',
+          weight: 3,
+          readiness: 90
+        },
+        {
+          id: 3,
+          subject: 'Matematyka',
+          type: 'Kartkówka',
+          date: 'Jutro (06.10, 11:40)',
+          room: 'Sala 302',
+          topic: 'Rachunek prawdopodobieństwa, kombinatoryka (wariacje, permutacje, dwumian Newtona)',
+          teacher: 'mgr M. Nowak',
+          weight: 1,
+          readiness: 50
+        },
+        {
+          id: 4,
+          subject: 'Aplikacje Webowe',
+          type: 'Egzamin',
+          date: '15.10.2026 (08:50)',
+          room: 'Pracownia Webowa',
+          topic: 'Próbny egzamin praktyczny INF.03: Manipulacja drzewem DOM w JavaScript, obsługa zapytań Fetch API i formularze',
+          teacher: 'mgr P. Zieliński',
+          weight: 4,
+          readiness: 85
+        }
+      ],
+
+      // Tasks
+      tasks: [
+        { id: 1, title: 'Laboratorium C++: Implementacja stosu opartego na szablonach', subject: 'Programowanie C++', priority: 'Wysoki', dueDate: '2026-10-07', completed: false },
+        { id: 2, title: 'Projekt bazy przychodni w 3NF (schemat + skrypt DDL)', subject: 'Bazy Danych', priority: 'Wysoki', dueDate: '2026-10-09', completed: false },
+        { id: 3, title: 'Zestaw 10 zadań: prawdopodobieństwo warunkowe', subject: 'Matematyka', priority: 'Średni', dueDate: '2026-10-06', completed: false },
+        { id: 4, title: 'Arkusz egzaminacyjny INF.03 czerwiec 2024 (część praktyczna)', subject: 'Aplikacje Webowe', priority: 'Średni', dueDate: '2026-10-14', completed: true },
+        { id: 5, title: 'Przetłumaczyć dokumentację techniczną biblioteki SQLite3', subject: 'Język Angielski', priority: 'Niski', dueDate: '2026-10-18', completed: true }
+      ],
+
+      // Notes
+      notes: [
+        {
+          id: 1,
+          title: 'SQL: Podstawowe JOINy & 3NF',
+          subject: 'Bazy Danych',
+          date: '02.10.2026',
+          content: `-- ZSE Bazy Danych: Przykłady zapytań z relacjami\n\n-- INNER JOIN: rekordy istniejące w obu tabelach\nSELECT u.imie, u.nazwisko, o.wartosc, o.waga\nFROM uczniowie u\nINNER JOIN oceny o ON u.id_ucznia = o.id_ucznia\nWHERE o.wartosc >= 4.0;\n\n-- 3. Postać Normalna (3NF):\n-- 1. Jest w 2NF (brak zależności częściowych od klucza złożonego)\n-- 2. Żaden atrybut niekluczowy nie zależy przechodnio od klucza głównego (brak X -> Y -> Z).`
+        },
+        {
+          id: 2,
+          title: 'C++: Wskaźniki, referencje i unique_ptr',
+          subject: 'Programowanie C++',
+          date: '29.09.2026',
+          content: `// Nowoczesne zarządzanie pamięcią w C++ (RAII)\n#include <iostream>\n#include <memory>\n\nclass Silnik {\npublic:\n    Silnik() { std::cout << "Silnik zainicjalizowany\\n"; }\n    ~Silnik() { std::cout << "Silnik zniszczony bezpiecznie\\n"; }\n};\n\nint main() {\n    // std::unique_ptr zwalnia pamięć automatycznie, eliminując delete!\n    std::unique_ptr<Silnik> s = std::make_unique<Silnik>();\n    return 0;\n}`
+        },
+        {
+          id: 3,
+          title: 'INF.03: JavaScript DOM & Async Fetch',
+          subject: 'Aplikacje Webowe',
+          date: '25.09.2026',
+          content: `// Schemat zadania praktycznego z kwalifikacji INF.03\ndocument.getElementById('btnSubmit').addEventListener('click', async (e) => {\n    e.preventDefault();\n    const inputVal = document.getElementById('poleTekstowe').value;\n    \n    // Prawidłowa obsługa asynchroniczności:\n    try {\n        const res = await fetch('/api/dane?query=' + encodeURIComponent(inputVal));\n        const data = await res.json();\n        console.log("Wynik pobrany:", data);\n    } catch (err) {\n        console.error("Błąd sieci:", err);\n    }\n});`
+        }
+      ],
+      activeNoteId: 1,
+
+      // Subjects summary ledger
+      subjectsLedger: [
+        { name: 'Programowanie C++', teacher: 'mgr inż. T. Kowalczyk', avg: '4.80', labs: '7/8', attendance: '97.5%', predicted: '5 (bdb)' },
+        { name: 'Bazy Danych i SQL', teacher: 'dr A. Wiśniewski', avg: '5.00', labs: '6/6', attendance: '98.0%', predicted: '6 (cel)' },
+        { name: 'Aplikacje Webowe', teacher: 'mgr P. Zieliński', avg: '4.65', labs: '5/7', attendance: '94.0%', predicted: '5 (bdb)' },
+        { name: 'Matematyka', teacher: 'mgr M. Nowak', avg: '4.25', labs: '3/4', attendance: '92.0%', predicted: '4 (db)' },
+        { name: 'Język Angielski Zawodowy', teacher: 'mgr E. Lewandowska', avg: '5.00', labs: '4/4', attendance: '96.0%', predicted: '5 (bdb)' },
+        { name: 'Systemy Operacyjne Linux', teacher: 'inż. K. Mazur', avg: '4.50', labs: '8/10', attendance: '91.5%', predicted: '5 (bdb)' }
+      ],
+
+      // Recent Vulcan grades
+      recentGrades: [
+        { subject: 'Programowanie C++', category: 'Sprawdzian (Wskaźniki)', weight: 3, grade: '5.0', date: '02.10.2026', teacher: 'T. Kowalczyk' },
+        { subject: 'Bazy Danych', category: 'Projekt (Model relacyjny)', weight: 2, grade: '5.0', date: '28.09.2026', teacher: 'A. Wiśniewski' },
+        { subject: 'Matematyka', category: 'Kartkówka (Kombinatoryka)', weight: 1, grade: '4.0', date: '24.09.2026', teacher: 'M. Nowak' },
+        { subject: 'Aplikacje Webowe', category: 'Zadanie laboratoryjne', weight: 2, grade: '5.0', date: '20.09.2026', teacher: 'P. Zieliński' }
+      ]
+    };
+
+    function applyTheme(theme) {
+      state.theme = theme;
+      localStorage.setItem('studytrack_theme', theme);
+      const html = document.documentElement;
+      if (theme === 'dark') {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+      lucide.createIcons();
+    }
+
+    function toggleTheme() {
+      const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      showToast('Zmieniono motyw', newTheme === 'dark' ? 'Włączono motyw GitHub Dark' : 'Włączono motyw Marble Light (Marmur)', 'info');
+    }
+
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      const activeSection = document.getElementById(`tab-${tabId}`);
+      if (activeSection) activeSection.classList.remove('hidden');
+
+      // Update Subnav button active styles
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabId) {
+          btn.className = 'tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-primary)] bg-[var(--bg-subtle)] border border-[var(--border-default)] transition';
+        } else {
+          btn.className = 'tab-btn flex items-center gap-2 px-3 py-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] border border-transparent transition';
+        }
+      });
+      lucide.createIcons();
+    }
+
+    function showToast(title, desc, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto github-card p-3 shadow-lg flex items-start gap-2.5 w-72 text-xs transition-opacity duration-200 opacity-0 translate-y-1 bg-[var(--bg-surface)]`;
+      
+      let iconColor = 'text-[#58a6ff]';
+      if (type === 'success') iconColor = 'text-[#2ea043]';
+      if (type === 'error') iconColor = 'text-[#cf222e]';
+
+      toast.innerHTML = `
+        <div class="mt-0.5 ${iconColor}"><i data-lucide="${type === 'success' ? 'check' : type === 'error' ? 'alert-triangle' : 'info'}" class="w-4 h-4"></i></div>
+        <div class="flex-1">
+          <p class="font-bold text-[var(--text-primary)]">${title}</p>
+          <p class="text-[var(--text-secondary)] mt-0.5 text-[11px] leading-tight">${desc}</p>
+        </div>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('opacity-0', 'translate-y-1');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-1');
+        setTimeout(() => toast.remove(), 200);
+      }, 3500);
+    }
+
+    function togglePomodoro() {
+      const icon = document.getElementById('pomo-icon');
+      if (state.pomo.isRunning) {
+        clearInterval(state.pomo.timer);
+        state.pomo.isRunning = false;
+        icon.setAttribute('data-lucide', 'play');
+      } else {
+        state.pomo.isRunning = true;
+        icon.setAttribute('data-lucide', 'pause');
+        state.pomo.timer = setInterval(() => {
+          if (state.pomo.secondsLeft > 0) {
+            state.pomo.secondsLeft--;
+            renderPomodoro();
+          } else {
+            clearInterval(state.pomo.timer);
+            state.pomo.isRunning = false;
+            icon.setAttribute('data-lucide', 'play');
+            showToast('Koniec sesji Focus!', 'Czas na 5 minut przerwy i rozciąganie.', 'success');
+          }
+        }, 1000);
+      }
+      lucide.createIcons();
+    }
+
+    function resetPomodoro() {
+      clearInterval(state.pomo.timer);
+      state.pomo.isRunning = false;
+      state.pomo.secondsLeft = 25 * 60;
+      renderPomodoro();
+      document.getElementById('pomo-icon').setAttribute('data-lucide', 'play');
+      lucide.createIcons();
+    }
+
+    function renderPomodoro() {
+      const m = Math.floor(state.pomo.secondsLeft / 60).toString().padStart(2, '0');
+      const s = (state.pomo.secondsLeft % 60).toString().padStart(2, '0');
+      document.getElementById('pomo-display').innerText = `${m}:${s}`;
+    }
+
+    function simulateVulcanSync() {
+      const spin = document.getElementById('sync-spin');
+      const label = document.getElementById('sync-label');
+      const pulse = document.getElementById('sync-pulse');
+      
+      spin.classList.add('animate-spin');
+      label.innerText = 'Pobieranie ocen...';
+      pulse.className = 'w-2 h-2 rounded-full bg-[#d29922] inline-block';
+
+      setTimeout(() => {
+        spin.classList.remove('animate-spin');
+        label.innerText = 'Vulcan API: Zsynchronizowano';
+        pulse.className = 'w-2 h-2 rounded-full bg-[#2ea043] inline-block';
+        showToast('Zsynchronizowano', 'Pobrano aktualne wpisy ze szkolnego portalu ZSE.', 'success');
+      }, 900);
+    }
+
+    function renderHeatmap() {
+      const container = document.getElementById('activity-heatmap');
+      if (!container) return;
+
+      // 35 days matrix (5 columns x 7 rows)
+      const levels = [
+        0, 1, 2, 3, 2, 4, 3,
+        1, 0, 2, 4, 3, 3, 4,
+        2, 3, 4, 4, 3, 2, 1,
+        0, 2, 3, 3, 4, 4, 2,
+        3, 4, 4, 3, 4, 3, 4
+      ];
+
+      const tooltip = document.getElementById('heatmap-tooltip');
+      container.innerHTML = '';
+
+      levels.forEach((lvl, idx) => {
+        const cell = document.createElement('div');
+        const dayNumber = idx + 1;
+        
+        let colorClass = 'bg-[var(--bg-subtle)] border border-[var(--border-default)]';
+        if (lvl === 1) colorClass = 'bg-[#0e4429] opacity-60';
+        if (lvl === 2) colorClass = 'bg-[#006d32]';
+        if (lvl === 3) colorClass = 'bg-[#26a641]';
+        if (lvl === 4) colorClass = 'bg-[#39d353]';
+
+        cell.className = `w-3 h-3 rounded-sm cursor-pointer transition-transform hover:scale-125 ${colorClass}`;
+        cell.onmouseenter = () => {
+          const hours = (lvl * 1.25).toFixed(1);
+          tooltip.innerText = `Dzień ${dayNumber}: ${hours}h nauki własnej • 100% obecności w ZSE`;
+        };
+        cell.onmouseleave = () => {
+          tooltip.innerText = 'Wskaż pole, aby wyświetlić szczegóły sesji.';
+        };
+        container.appendChild(cell);
+      });
+    }
+
+    function renderDashboardFeeds() {
+      // 1. Dashboard Exam List
+      const examContainer = document.getElementById('dashboard-exam-list');
+      if (examContainer) {
+        examContainer.innerHTML = state.exams.slice(0, 3).map(e => `
+          <div class="flex items-center justify-between p-2.5 rounded bg-[var(--bg-subtle)] border border-[var(--border-default)]">
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-[var(--text-primary)]">${e.subject}</span>
+                <span class="text-[10px] font-mono px-1 rounded border border-[var(--border-default)] text-[var(--text-secondary)]">${e.type}</span>
+              </div>
+              <p class="text-[11px] text-[var(--text-secondary)] line-clamp-1 font-mono">${e.topic}</p>
+            </div>
+            <button onclick="primeAITutor('${e.subject}', '${e.topic.replace(/'/g, "\\'")}')" class="text-xs font-medium text-[#0969da] dark:text-[#58a6ff] hover:underline flex items-center gap-1 font-mono flex-shrink-0 ml-2">
+              Przygotuj z AI
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // 2. Dashboard Task List
+      const taskContainer = document.getElementById('dashboard-task-list');
+      if (taskContainer) {
+        taskContainer.innerHTML = state.tasks.filter(t => !t.completed).slice(0, 3).map(t => `
+          <div class="flex items-center justify-between p-2 rounded bg-[var(--bg-subtle)] border border-[var(--border-default)]">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" onchange="toggleTask(${t.id})" class="rounded border-[var(--border-default)] text-[#2ea043] focus:ring-0 cursor-pointer">
+              <span class="text-xs text-[var(--text-primary)] font-medium">${t.title}</span>
+            </div>
+            <span class="text-[10px] font-mono text-[var(--text-muted)]">${t.dueDate}</span>
+          </div>
+        `).join('');
+      }
+      lucide.createIcons();
+    }
+
+    let currentExamFilter = 'all';
+
+    function renderExamsView() {
+      const container = document.getElementById('exams-container');
+      const countLabel = document.getElementById('exam-count-label');
+      if (!container) return;
+
+      const filtered = state.exams.filter(e => {
+        if (currentExamFilter === 'all') return true;
+        return e.type.toLowerCase().includes(currentExamFilter.toLowerCase());
+      });
+
+      if (countLabel) countLabel.innerText = `Pokazano ${filtered.length} wpisy`;
+
+      container.innerHTML = filtered.map(e => `
+        <div class="github-card p-4 space-y-3 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-mono text-[11px] px-2 py-0.5 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] text-[var(--text-secondary)]">
+                ${e.type} • Waga ${e.weight}
+              </span>
+              <span class="font-mono text-[var(--text-secondary)] flex items-center gap-1">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-[var(--text-muted)]"></i> ${e.date}
+              </span>
+            </div>
+
+            <h3 class="text-sm font-bold text-[var(--text-primary)]">${e.subject}</h3>
+            <p class="text-xs text-[var(--text-muted)] font-mono flex items-center gap-1">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> ${e.room} • ${e.teacher}
+            </p>
+
+            <div class="p-2.5 rounded bg-[var(--bg-subtle)] border border-[var(--border-default)]">
+              <span class="text-[10px] uppercase font-mono text-[var(--text-muted)] block mb-1">Zakres tematyczny:</span>
+              <p class="text-xs font-mono text-[var(--text-primary)] leading-relaxed">${e.topic}</p>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-[var(--border-default)] flex items-center justify-between gap-3">
+            <div class="flex-1">
+              <div class="flex justify-between text-[11px] font-mono text-[var(--text-muted)] mb-1">
+                <span>Gotowość:</span>
+                <span class="font-bold text-[var(--text-primary)]">${e.readiness}%</span>
+              </div>
+              <div class="w-full bg-[var(--bg-subtle)] border border-[var(--border-default)] h-1.5 rounded overflow-hidden">
+                <div class="bg-[#2ea043] h-full" style="width: ${e.readiness}%"></div>
+              </div>
+            </div>
+
+            <button onclick="primeAITutor('${e.subject}', '${e.topic.replace(/'/g, "\\'")}')" class="text-xs font-medium px-3 py-1.5 rounded bg-[var(--bg-subtle)] hover:bg-[var(--bg-hover)] border border-[var(--border-default)] text-[var(--text-primary)] flex items-center gap-1.5 transition">
+              <i data-lucide="bot" class="w-3.5 h-3.5 text-[#8250df]"></i>
+              <span>Powtórz z AI</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function filterExams(type) {
+      currentExamFilter = type;
+      document.querySelectorAll('.exam-filter-btn').forEach(btn => {
+        btn.className = 'exam-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium';
+      });
+      event.target.className = 'exam-filter-btn px-2.5 py-1 rounded text-[var(--text-primary)] bg-[var(--bg-subtle)] font-medium';
+      renderExamsView();
+    }
+
+    let currentTaskFilter = 'all';
+
+    function renderTasksView() {
+      const container = document.getElementById('tasks-full-list');
+      if (!container) return;
+
+      const filtered = state.tasks.filter(t => {
+        if (currentTaskFilter === 'pending') return !t.completed;
+        if (currentTaskFilter === 'completed') return t.completed;
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-xs text-[var(--text-muted)]">Brak zadań w wybranej kategorii.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => `
+        <div class="p-3 sm:p-4 flex items-center justify-between gap-3 hover:bg-[var(--bg-subtle)] transition">
+          <div class="flex items-center gap-3 min-w-0">
+            <input type="checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})" class="rounded border-[var(--border-default)] text-[#2ea043] focus:ring-0 cursor-pointer">
+            <div class="min-w-0">
+              <p class="text-xs sm:text-sm font-medium ${t.completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'} truncate">${t.title}</p>
+              <div class="flex items-center gap-2 text-[11px] font-mono text-[var(--text-secondary)] mt-0.5">
+                <span>${t.subject}</span>
+                <span>•</span>
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${t.dueDate}</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded border border-[var(--border-default)] ${t.priority === 'Wysoki' ? 'text-[#cf222e]' : t.priority === 'Średni' ? 'text-[#d29922]' : 'text-[#2ea043]'}">
+              ${t.priority}
+            </span>
+            <button onclick="deleteTask(${t.id})" class="p-1 text-[var(--text-muted)] hover:text-[#cf222e] transition" title="Usuń zadanie">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function toggleTask(id) {
+      const task = state.tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        renderTasksView();
+        renderDashboardFeeds();
+        showToast('Zaktualizowano', task.completed ? `Ukończono: ${task.title}` : `Wznowiono: ${task.title}`, 'info');
+      }
+    }
+
+    function deleteTask(id) {
+      state.tasks = state.tasks.filter(t => t.id !== id);
+      renderTasksView();
+      renderDashboardFeeds();
+      showToast('Usunięto', 'Zadanie zostało usunięte z listy.', 'info');
+    }
+
+    function filterTasks(type) {
+      currentTaskFilter = type;
+      document.querySelectorAll('.task-filter-btn').forEach(btn => {
+        btn.className = 'task-filter-btn px-2.5 py-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-medium';
+      });
+      event.target.className = 'task-filter-btn px-2.5 py-1 rounded text-[var(--text-primary)] bg-[var(--bg-subtle)] font-medium';
+      renderTasksView();
+    }
+
+    function handleQuickTaskAdd(e) {
+      e.preventDefault();
+      const input = document.getElementById('dashboard-quick-task');
+      const val = input.value.trim();
+      if (!val) return;
+
+      state.tasks.unshift({
+        id: Date.now(),
+        title: val,
+        subject: 'Programowanie C++',
+        priority: 'Średni',
+        dueDate: '2026-10-08',
+        completed: false
+      });
+      input.value = '';
+      renderTasksView();
+      renderDashboardFeeds();
+      showToast('Dodano zadanie', val, 'success');
+    }
+
+    function openAddTaskModal() {
+      document.getElementById('modal-task').classList.remove('hidden');
+    }
+    function closeAddTaskModal() {
+      document.getElementById('modal-task').classList.add('hidden');
+    }
+
+    function handleCreateTask(e) {
+      e.preventDefault();
+      const title = document.getElementById('task-modal-title').value.trim();
+      const subject = document.getElementById('task-modal-subject').value;
+      const priority = document.getElementById('task-modal-priority').value;
+      const dueDate = document.getElementById('task-modal-date').value;
+
+      state.tasks.unshift({
+        id: Date.now(),
+        title,
+        subject,
+        priority,
+        dueDate,
+        completed: false
+      });
+      closeAddTaskModal();
+      renderTasksView();
+      renderDashboardFeeds();
+      showToast('Dodano zadanie', title, 'success');
+    }
+
+    function renderNotes() {
+      const sidebar = document.getElementById('notes-sidebar');
+      if (!sidebar) return;
+
+      sidebar.innerHTML = state.notes.map(n => `
+        <div onclick="selectNote(${n.id})" class="p-2.5 rounded cursor-pointer border ${n.id === state.activeNoteId ? 'bg-[var(--bg-subtle)] border-[var(--border-default)]' : 'border-transparent hover:bg-[var(--bg-subtle)]'} transition">
+          <p class="text-xs font-semibold text-[var(--text-primary)] truncate font-mono">${n.title}</p>
+          <div class="flex items-center justify-between text-[10px] text-[var(--text-secondary)] font-mono mt-1">
+            <span>${n.subject}</span>
+            <span>${n.date}</span>
+          </div>
+        </div>
+      `).join('');
+
+      const active = state.notes.find(n => n.id === state.activeNoteId);
+      if (active) {
+        document.getElementById('note-editor-title').value = active.title;
+        document.getElementById('note-editor-content').value = active.content;
+        document.getElementById('note-editor-tag').innerText = active.subject;
+      }
+    }
+
+    function selectNote(id) {
+      state.activeNoteId = id;
+      renderNotes();
+    }
+
+    function saveCurrentNote() {
+      const active = state.notes.find(n => n.id === state.activeNoteId);
+      if (active) {
+        active.title = document.getElementById('note-editor-title').value;
+        active.content = document.getElementById('note-editor-content').value;
+        renderNotes();
+        showToast('Zapisano notatkę', 'Wprowadzone zmiany zostały zapisane.', 'success');
+      }
+    }
+
+    function createNewNote() {
+      const newNote = {
+        id: Date.now(),
+        title: 'Nowa Notatka Techniczna',
+        subject: 'Informatyka',
+        date: new Date().toLocaleDateString('pl-PL'),
+        content: `// Nowy plik notatki z zajęć ZSE Gdańsk\n\n`
+      };
+      state.notes.unshift(newNote);
+      state.activeNoteId = newNote.id;
+      renderNotes();
+      showToast('Nowa notatka', 'Utworzono pusty arkusz kodu.', 'info');
+    }
+
+    function copyCurrentNoteCode() {
+      const code = document.getElementById('note-editor-content').value;
+      const el = document.createElement('textarea');
+      el.value = code;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      showToast('Skopiowano kod', 'Treść notatki znajduje się w schowku.', 'success');
+    }
+
+    function sendActiveNoteToAI() {
+      const active = state.notes.find(n => n.id === state.activeNoteId);
+      if (!active) return;
+      switchTab('mentor');
+      sendQuickPrompt(`Przeanalizuj poniższą notatkę z przedmiotu ${active.subject}. Wyjaśnij jej newralgiczne punkty i przygotuj 2 pytania kontrolne:\n\n${active.content}`);
+    }
+
+    async function callGemini(promptText, systemInstruction) {
+      const apiKey = state.apiKey || "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: promptText }] }],
+        systemInstruction: {
+          parts: [{ text: systemInstruction }]
+        }
+      };
+
+      // Exponential backoff
+      let delay = 1000;
+      for (let i = 0; i < 3; i++) {
+        try {
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text;
+          }
+        } catch (e) {
+          await new Promise(r => setTimeout(r, delay));
+          delay *= 2;
+        }
+      }
+
+      // Realistic offline simulation fallback
+      return `### Odpowiedź ZSE Study Mentor (Tryb offline / Demo):\n\nŚwietne pytanie pod kątem sprawdzianu! Oto kluczowe zagadnienia:\n\n1. **Teoria & Praktyka:**\n   - Zawsze pamiętaj o poprawnym zarządzaniu pamięcią lub zwalnianiu zasobów (RAII w C++, zamykanie kursorów w SQL).\n   - Na egzaminie praktycznym **INF.03** kluczowe jest sprawdzanie poprawności danych wejściowych z formularza przed wykonaniem zapytań.\n\n2. **Przykładowy fragment:**\n\`\`\`cpp\n// Bezpieczne wskaźniki i wektory:\nstd::vector<int> oceny = {5, 4, 6, 5};\nfor(const auto& ocena : oceny) {\n    std::cout << "Ocena: " << ocena << "\\n";\n}\n\`\`\`\n\n3. **Wskazówka:** Przejrzyj przykładowe arkusze CKE z lat 2022-2024. Powodzenia!`;
+    }
+
+    async function handleSendChatMessage(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('mentor-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      appendChatMessage('user', text);
+      input.value = '';
+
+      const btn = document.getElementById('mentor-send-btn');
+      btn.disabled = true;
+
+      const systemPrompt = `Jesteś profesjonalnym mentorem i nauczycielem w Zespole Szkół Energetycznych w Gdańsku (ZSE Gdańsk). Pomagasz uczniom technikum programistycznego w przedmiotach: C++, Bazy Danych SQL, JavaScript (INF.03/INF.04) oraz Matematyka. Odpowiadaj zwięźle, konkretnie, używaj bloków kodu oraz list. Zachowaj profesjonalny, akademicki ton.`;
+
+      try {
+        const reply = await callGemini(text, systemPrompt);
+        appendChatMessage('assistant', reply);
+      } catch (err) {
+        appendChatMessage('assistant', "Wystąpił błąd podczas generowania odpowiedzi. Upewnij się, że masz połączenie z siecią lub podaj własny klucz API w ustawieniach.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function appendChatMessage(role, content) {
+      const thread = document.getElementById('mentor-chat-thread');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flex gap-3 text-xs';
+
+      let parsed = content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      // Format markdown code fences
+      parsed = parsed.replace(/```([\s\S]*?)```/g, function(match, code) {
+        return `<pre class="my-2 p-3 rounded bg-[var(--code-bg)] border border-[var(--border-default)] font-mono text-[11px] overflow-x-auto text-[var(--text-primary)]"><code>${code.trim()}</code></pre>`;
+      });
+
+      // Format bold text
+      parsed = parsed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      parsed = parsed.replace(/\n/g, '<br/>');
+
+      if (role === 'user') {
+        wrapper.innerHTML = `
+          <div class="flex-1 flex justify-end">
+            <div class="max-w-xl border border-[var(--border-default)] bg-[var(--bg-subtle)] rounded-md p-3 text-[var(--text-primary)] leading-relaxed">
+              <div class="flex items-center justify-between pb-1 mb-1 border-b border-[var(--border-default)] text-[10px] text-[var(--text-secondary)] font-mono">
+                <span class="font-bold text-[var(--text-primary)]">Ty (Uczeń 4P)</span>
+                <span>teraz</span>
+              </div>
+              <p>${parsed}</p>
+            </div>
+          </div>
+          <div class="w-7 h-7 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] flex items-center justify-center font-mono font-bold text-xs text-[var(--text-primary)] flex-shrink-0">
+            JK
+          </div>
+        `;
+      } else {
+        wrapper.innerHTML = `
+          <div class="w-7 h-7 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] flex items-center justify-center font-mono font-bold text-xs text-[#8250df] flex-shrink-0">
+            AI
+          </div>
+          <div class="flex-1 max-w-2xl border border-[var(--border-default)] bg-[var(--bg-subtle)] rounded-md p-3 text-[var(--text-primary)] leading-relaxed">
+            <div class="flex items-center justify-between pb-1 mb-1 border-b border-[var(--border-default)] text-[10px] text-[var(--text-secondary)] font-mono">
+              <span class="font-bold text-[var(--text-primary)]">ZSE Study Mentor</span>
+              <span>Gemini Flash</span>
+            </div>
+            <p>${parsed}</p>
+          </div>
+        `;
+      }
+
+      thread.appendChild(wrapper);
+      thread.scrollTop = thread.scrollHeight;
+      lucide.createIcons();
+    }
+
+    function sendQuickPrompt(promptText) {
+      document.getElementById('mentor-input').value = promptText;
+      handleSendChatMessage();
+    }
+
+    function primeAITutor(subject, topic) {
+      switchTab('mentor');
+      sendQuickPrompt(`Jestem uczniem ZSE Gdańsk. Przygotuj dla mnie zwięzłe podsumowanie do sprawdzianu z przedmiotu "${subject}" na temat: "${topic}". Podaj definicje, 1 przykład kodu i 2 pytania egzaminacyjne.`);
+    }
+
+    function clearChatHistory() {
+      const thread = document.getElementById('mentor-chat-thread');
+      thread.innerHTML = `
+        <div class="flex gap-3 text-xs">
+          <div class="w-7 h-7 rounded border border-[var(--border-default)] bg-[var(--bg-subtle)] flex items-center justify-center font-mono font-bold text-xs text-[#8250df] flex-shrink-0">AI</div>
+          <div class="flex-1 border border-[var(--border-default)] bg-[var(--bg-subtle)] rounded-md p-3 text-[var(--text-primary)]">
+            Historia została wyczyszczona. W czym mogę pomóc?
+          </div>
+        </div>
+      `;
+      showToast('Wyczyszczono', 'Historia konwersacji została zresetowana.', 'info');
+    }
+
+    function renderGradesView() {
+      // 1. Subjects Summary Table
+      const summaryBody = document.getElementById('grades-summary-tbody');
+      if (summaryBody) {
+        summaryBody.innerHTML = state.subjectsLedger.map(s => `
+          <tr class="hover:bg-[var(--bg-subtle)] transition">
+            <td class="py-2.5 px-4 font-semibold text-[var(--text-primary)] font-sans">${s.name}</td>
+            <td class="py-2.5 px-4 text-[var(--text-secondary)] font-sans text-xs">${s.teacher}</td>
+            <td class="py-2.5 px-4 text-center font-bold text-[#2ea043]">${s.avg}</td>
+            <td class="py-2.5 px-4 text-center text-[var(--text-secondary)]">${s.labs}</td>
+            <td class="py-2.5 px-4 text-center text-[var(--text-secondary)]">${s.attendance}</td>
+            <td class="py-2.5 px-4 text-right font-medium text-[var(--text-primary)]">${s.predicted}</td>
+          </tr>
+        `).join('');
+      }
+
+      // 2. Recent Grades Ledger
+      const recentBody = document.getElementById('recent-grades-tbody');
+      if (recentBody) {
+        recentBody.innerHTML = state.recentGrades.map(g => `
+          <tr class="hover:bg-[var(--bg-subtle)] transition font-mono text-xs">
+            <td class="py-2.5 px-4 font-sans font-medium text-[var(--text-primary)]">${g.subject}</td>
+            <td class="py-2.5 px-4 text-[var(--text-secondary)] font-sans">${g.category}</td>
+            <td class="py-2.5 px-4 text-center text-[var(--text-muted)]">${g.weight}</td>
+            <td class="py-2.5 px-4 text-center font-bold text-[#2ea043] text-sm">${g.grade}</td>
+            <td class="py-2.5 px-4 text-[var(--text-muted)]">${g.date}</td>
+            <td class="py-2.5 px-4 font-sans text-[var(--text-secondary)]">${g.teacher}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // API Key Modal Controls
+    function openApiKeyModal() {
+      document.getElementById('modal-api-key').classList.remove('hidden');
+      document.getElementById('api-key-input').value = state.apiKey;
+    }
+    function closeApiKeyModal() {
+      document.getElementById('modal-api-key').classList.add('hidden');
+    }
+    function saveApiKey() {
+      const val = document.getElementById('api-key-input').value.trim();
+      state.apiKey = val;
+      localStorage.setItem('studytrack_gemini_key', val);
+      closeApiKeyModal();
+      showToast('Zapisano klucz', 'Klucz Gemini API został zaktualizowany.', 'success');
+    }
+
+    window.onload = function() {
+      applyTheme(state.theme);
+      renderPomodoro();
+      renderHeatmap();
+      renderDashboardFeeds();
+      renderExamsView();
+      renderTasksView();
+      renderNotes();
+      renderGradesView();
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
